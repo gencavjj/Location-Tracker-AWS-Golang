@@ -1,4 +1,4 @@
-.PHONY: build clean test test-api
+.PHONY: build clean test run
 
 build:
 	GOOS=linux GOARCH=amd64 go build -o api ./main.go
@@ -9,7 +9,7 @@ clean:
 test:
 	go test ./...
 
-test-api:
+run:
 	GOOS=linux GOARCH=amd64 go build -o api ./main.go
-	open http://127.0.0.1:3000/healthcheck
-	sam local start-api --template template.json
+	open http://localhost:8080/healthcheck
+	sam local start-api -p 8080 --template template.json

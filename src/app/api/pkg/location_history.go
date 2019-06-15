@@ -31,6 +31,7 @@ func (c *Core) GetLocationHistory(request events.APIGatewayProxyRequest) (events
 		return events.APIGatewayProxyResponse{
 			Body:       fmt.Sprintf("error converting to time: %v", err),
 			StatusCode: http.StatusInternalServerError,
+			Headers:    headers(),
 		}, err
 	}
 	l.Date = t
@@ -44,11 +45,13 @@ func (c *Core) GetLocationHistory(request events.APIGatewayProxyRequest) (events
 		return events.APIGatewayProxyResponse{
 			Body:       fmt.Sprintf("error converting to bytes: %v", err),
 			StatusCode: http.StatusInternalServerError,
+			Headers:    headers(),
 		}, err
 	}
 
 	return events.APIGatewayProxyResponse{
 		Body:       string(b),
 		StatusCode: http.StatusOK,
+		Headers:    headers(),
 	}, nil
 }

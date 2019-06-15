@@ -60,7 +60,7 @@ This uses AWS SAM and make to run the commands:
 cd src/app/api
 
 # Test the API locally (after doing a build).
-make test-api
+make run
 ```
 
 You can also use these commands:
