@@ -1,0 +1,66 @@
+{
+    "AWSTemplateFormatVersion": "2010-09-09",
+    "Transform": "AWS::Serverless-2016-10-31",
+    "Description": "SAM Template for Location Tracker.",
+    "Globals": {
+        "Function": {
+            "Timeout": 5
+        }
+    },
+    "Resources": {
+        "MainFunction": {
+            "Type": "AWS::Serverless::Function",
+            "Properties": {
+                "Handler": "api",
+                "Runtime": "go1.x",
+                "Tracing": "Active",
+                "Policies": [
+                    "arn:aws:iam::aws:policy/service-role/AWSLambdaRole",
+                    "arn:aws:iam::aws:policy/service-role/AWSLambdaVPCAccessExecutionRole"
+                ],
+                "VpcConfig": {
+                    "SecurityGroupIds": [
+                        "sg-f33244a8"
+                    ],
+                    "SubnetIds": [
+                        "subnet-6b09ed26",
+                        "subnet-55affe09"
+                    ]
+                },
+                "Events": {
+                    "Hello": {
+                        "Type": "Api",
+                        "Properties": {
+                            "Path": "/healthcheck",
+                            "Method": "GET"
+                        }
+                    },
+                    "Data": {
+                        "Type": "Api",
+                        "Properties": {
+                            "Path": "/api/location-history",
+                            "Method": "GET"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "Outputs": {
+        "URL": {
+            "Description": "API Gateway endpoint URL",
+            "Value": {
+                "Fn::Sub": "https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/"
+            }
+        },
+        "LambdaFunction": {
+            "Description": "Lambda Function ARN",
+            "Value": {
+                "Fn::GetAtt": [
+                    "MainFunction",
+                    "Arn"
+                ]
+            }
+        }
+    }
+}
